@@ -1085,11 +1085,11 @@ function popup(name){
         }).catch(function(){});
     },200);
   }
-  // Generic profile button for any suburb with a card div
-  var profileId = name.toLowerCase().replace(/\s+/g,'-') + '-profile';
-  if(document.getElementById(profileId)){
+  // Profile button — hardcoded list of suburbs with full cards
+  var PROFILES={'Glebe':'glebe-profile','Kirribilli':'kirribilli-profile'};
+  if(PROFILES[name]){
     html+='<div style="padding:4px 14px 12px;border-top:.5px solid rgba(45,42,36,.1);margin-top:6px">'
-      +'<button data-profile="'+profileId+'" style="width:100%;padding:8px 0;background:#2D2A24;color:#F5F1E8;border:none;cursor:pointer;font-family:DM Sans,sans-serif;font-size:9px;font-weight:300;letter-spacing:.2em;text-transform:uppercase">Full profile \u2192</button>'
+      +'<button data-profile="'+PROFILES[name]+'" style="width:100%;padding:8px 0;background:#2D2A24;color:#F5F1E8;border:none;cursor:pointer;font-family:DM Sans,sans-serif;font-size:9px;font-weight:300;letter-spacing:.2em;text-transform:uppercase">Full profile \u2192</button>'
       +'</div>';
   }
   return html+'</div>';
