@@ -71,6 +71,7 @@ html,body{width:100%;height:100%;background:#06070f;overflow:hidden;cursor:none}
 #profile-iframe{width:100%;height:100%;border:none;display:block}
 
 #glebe-profile,#kirribilli-profile{display:none;position:fixed;inset:0;z-index:9999;overflow-y:auto}
+#glebe-profile .ui,#kirribilli-profile .ui{position:static!important;inset:auto!important;pointer-events:all!important;z-index:auto!important;display:grid;grid-template-columns:140px 1fr;gap:16px;padding:14px 0;border-bottom:.5px solid var(--h)}
 :root {--bg:#F5F1E8;--bg2:#E8E3D8;--dark:#2D2A24;--ink2:rgba(45,42,36,.78);--ink3:#7A6D5E;--accent:#5C4A3A;--h:rgba(45,42,36,.1);--gr:#4a7a4a;--am:#8a6020;--rd:#8a3030}
 #glebe-profile *,#kirribilli-profile * {margin:0;padding:0;box-sizing:border-box}
 #glebe-profile, #kirribilli-profile {background:var(--bg);color:var(--dark);font-family:'DM Sans',sans-serif;font-weight:300;-webkit-font-smoothing:antialiased}
@@ -1046,11 +1047,24 @@ function popup(name){
         }).catch(function(){});
     },200);
   }
-  var PROFILES={'GLEBE':'glebe-profile','KIRRIBILLI':'kirribilli-profile','MOSMAN':'mosman-iframe'};
-  if(PROFILES[name.toUpperCase()]){
+  // Universal: embedded divs for Glebe/Kirribilli; auto-detect .html for all others
+  var EMBEDDED={'GLEBE':'glebe-profile','KIRRIBILLI':'kirribilli-profile'};
+  var nameUC=name.toUpperCase();
+  var slug=name.toLowerCase().replace(/ /g,'-');
+  if(EMBEDDED[nameUC]){
     html+='<div style="padding:4px 14px 12px;border-top:.5px solid rgba(45,42,36,.1);margin-top:6px">'
-      +'<button data-profile="'+PROFILES[name.toUpperCase()]+'" style="width:100%;padding:8px 0;background:#2D2A24;color:#F5F1E8;border:none;cursor:pointer;font-family:DM Sans,sans-serif;font-size:9px;font-weight:300;letter-spacing:.2em;text-transform:uppercase">Full profile \u2192</button>'
+      +'<button data-profile="'+EMBEDDED[nameUC]+'" style="width:100%;padding:8px 0;background:#2D2A24;color:#F5F1E8;border:none;cursor:pointer;font-family:DM Sans,sans-serif;font-size:9px;font-weight:300;letter-spacing:.2em;text-transform:uppercase">Full profile \u2192</button>'
       +'</div>';
+  } else {
+    var pfid='pfbtn-'+slug;
+    html+='<div id="'+pfid+'" style="padding:4px 14px 12px;border-top:.5px solid rgba(45,42,36,.1);margin-top:6px;display:none">'
+      +'<button data-src="'+slug+'.html" style="width:100%;padding:8px 0;background:#2D2A24;color:#F5F1E8;border:none;cursor:pointer;font-family:DM Sans,sans-serif;font-size:9px;font-weight:300;letter-spacing:.2em;text-transform:uppercase">Full profile \u2192</button>'
+      +'</div>';
+    (function(id,file){
+      fetch(file,{method:'HEAD'}).then(function(r){
+        if(r.ok){var d=document.getElementById(id);if(d)d.style.display='block';}
+      }).catch(function(){});
+    })(pfid,slug+'.html');
   }
   return html+'</div>';
 }
@@ -1114,6 +1128,11 @@ function closeProfile(){
   ['glebe-profile','kirribilli-profile'].forEach(function(id){document.getElementById(id).style.display='none';});
   document.body.style.overflow='';
 }
+function closeIframeProfile(){
+  var ov=document.getElementById('profile-overlay');
+  if(ov){ov.style.display='none';document.getElementById('profile-iframe').src='';}
+  document.body.style.overflow='';
+}
 function openIframeProfile(src){
   var ov=document.getElementById('profile-overlay');
   var fr=document.getElementById('profile-iframe');
@@ -1129,10 +1148,12 @@ document.addEventListener('keydown',function(e){
   }
 });
 document.addEventListener('click',function(e){
-  var btn=e.target.closest('[data-profile]');
+  var btn=e.target.closest('[data-profile],[data-src]');
   if(btn){
+    var src=btn.getAttribute('data-src');
     var pid=btn.getAttribute('data-profile');
-    if(pid==='mosman-iframe'){openIframeProfile('mosman.html');}else{openProfile(pid);}
+    if(src){openIframeProfile(src);}
+    else if(pid){openProfile(pid);}
   }
 });
 
