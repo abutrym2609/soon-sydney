@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOON — Sydney Suburbs</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Sans:wght@200;300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;background:#06070f;overflow:hidden;cursor:none}
+#search-wrap *{pointer-events:all;cursor:auto}
+#search-input{cursor:text!important}
+#cursor{position:fixed;width:5px;height:5px;border-radius:50%;background:#ff7038;pointer-events:none;z-index:9000;transform:translate(-50%,-50%)}
+)}
+#ring{position:fixed;width:28px;height:28px;border-radius:50%;border:0.5px solid rgba(255,112,56,0.4);pointer-events:none;z-index:8999;transform:translate(-50%,-50%)}
+#map{width:100%;height:100%;position:absolute;inset:0}
+.leaflet-container{background:#06070f}
+.leaflet-control-zoom{border:none!important}
+.leaflet-control-zoom a{background:rgba(6,7,15,0.88)!important;color:rgba(255,112,56,0.7)!important;border:0.5px solid rgba(255,112,56,0.2)!important;border-radius:2px!important;font-weight:200!important;width:28px!important;height:28px!important;line-height:28px!important;margin-bottom:3px!important}
+.leaflet-control-zoom a:hover{background:rgba(255,112,56,0.12)!important;color:#ff7038!important}
+.leaflet-control-attribution{display:none!important}
+.sp{font-family:"DM Sans",sans-serif;background:rgba(6,7,15,0.97);border:0.5px solid rgba(255,112,56,0.18);min-width:300px;max-width:340px;overflow:hidden}
+.sp-h{padding:16px 22px 12px;border-bottom:0.5px solid rgba(255,112,56,0.12)}
+.sp-h .nm{font-family:"Cormorant Garamond",serif;font-size:22px;font-weight:300;font-style:italic;color:#f4efe7;line-height:1.05}
+.sp-h .meta{margin-top:4px;font-size:9px;font-weight:200;letter-spacing:.2em;color:rgba(255,255,255,0.2);text-transform:uppercase}
+.sp-char{padding:12px 22px;border-bottom:0.5px solid rgba(255,112,56,0.1);font-family:"Cormorant Garamond",serif;font-size:14px;font-weight:300;font-style:italic;color:rgba(245,240,232,0.75);line-height:1.48}
+.sp-standouts{padding:11px 22px;border-bottom:0.5px solid rgba(255,112,56,0.1)}
+.sp-st{display:flex;gap:9px;align-items:flex-start;margin-bottom:8px;font-size:12px;font-weight:300;color:rgba(245,240,232,0.86);line-height:1.42}
+.sp-st:last-child{margin-bottom:0}
+.sp-st .ic{flex-shrink:0;font-size:14px;line-height:1.3}
+.sp-persona{padding:11px 22px 12px;border-bottom:0.5px solid rgba(255,112,56,0.08)}
+.sp-who{font-size:8px;font-weight:200;letter-spacing:.22em;color:rgba(255,255,255,0.18);text-transform:uppercase;margin-bottom:7px}
+.sp-pname{font-size:10px;font-weight:500;color:rgba(255,112,56,0.88);margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em}
+.sp-q{font-size:11px;font-weight:300;line-height:1.55;font-style:italic;padding:7px 10px;margin-bottom:5px}
+.sp-q:last-child{margin-bottom:0}
+.sp-q .ql{font-size:7.5px;letter-spacing:.15em;text-transform:uppercase;font-style:normal;margin-bottom:3px;display:block;font-weight:500}
+.sp-q.pos{color:rgba(245,240,232,0.88);border-left:2px solid rgba(255,112,56,0.65);background:rgba(255,112,56,0.06)}
+.sp-q.pos .ql{color:rgba(255,112,56,0.7)}
+.sp-q.neg{color:rgba(245,240,232,0.5);border-left:2px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.03)}
+.sp-q.neg .ql{color:rgba(255,255,255,0.26)}
+.sp-prices{padding:9px 22px}
+.sp-pr{display:flex;gap:6px;align-items:flex-start;margin-bottom:4px;font-size:10px;font-weight:200;color:rgba(245,240,232,0.38);line-height:1.4}
+.sp-pr:last-child{margin-bottom:0}
+.sp-pr .ic{flex-shrink:0;font-size:11px;width:16px}
+.sp-pr .lbl{flex-shrink:0;font-size:7.5px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,112,56,0.35);margin-right:3px;line-height:1.8}
+.sp-pr strong{color:rgba(245,240,232,0.52);font-weight:400}
+.sp-src{padding:6px 22px;font-size:7px;font-weight:200;letter-spacing:.1em;color:rgba(255,255,255,0.1);text-transform:uppercase;border-top:0.5px solid rgba(255,255,255,0.04)}
+.leaflet-popup-content-wrapper{background:transparent!important;border:none!important;border-radius:0!important;box-shadow:0 20px 70px rgba(0,0,0,0.95)!important;padding:0!important}
+.leaflet-popup-content{margin:0!important}
+.leaflet-popup-tip-container{display:none!important}
+.leaflet-popup-close-button{color:rgba(255,255,255,0.18)!important;font-size:14px!important;top:10px!important;right:12px!important;z-index:10}
+.leaflet-tooltip.stip{background:rgba(6,7,15,0.92);border:0.5px solid rgba(255,112,56,0.3);border-radius:2px;padding:7px 13px;font-family:"Cormorant Garamond",serif;font-style:italic;font-weight:300;font-size:15px;color:#f4efe7;box-shadow:0 4px 20px rgba(0,0,0,0.6)}
+.leaflet-tooltip.stip::before{display:none}
+.ui{position:fixed;inset:0;pointer-events:none;z-index:1000}
+.wm{position:absolute;top:44px;left:48px;font-family:"Cormorant Garamond",serif;font-size:12px;font-weight:300;letter-spacing:.38em;color:rgba(255,255,255,0.38);text-transform:uppercase}
+.ct{position:absolute;top:44px;right:48px;font-family:"Cormorant Garamond",serif;font-size:11px;font-weight:300;letter-spacing:.14em;color:rgba(255,255,255,0.15)}
+.ht{position:absolute;bottom:44px;left:50%;transform:translateX(-50%);font-family:"DM Sans",sans-serif;font-size:10px;font-weight:200;letter-spacing:.24em;color:rgba(255,255,255,0.12);text-transform:uppercase;white-space:nowrap}
+#search-wrap{position:absolute;top:64px;right:48px;z-index:2000;width:220px;pointer-events:all}
+#search-input{width:100%;background:rgba(18,18,28,0.55);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:0.5px solid rgba(255,255,255,0.14);border-radius:14px;color:rgba(245,240,232,0.9);font-family:"DM Sans",sans-serif;font-size:13px;font-weight:300;padding:11px 18px 11px 40px;outline:none;letter-spacing:.02em;cursor:text!important;box-shadow:0 8px 32px rgba(0,0,0,0.45),inset 0 0.5px 0 rgba(255,255,255,0.08);transition:border-color .2s,box-shadow .2s}
+#search-input::placeholder{color:rgba(255,255,255,0.28)}
+#search-input:focus{border-color:rgba(255,255,255,0.28);box-shadow:0 8px 40px rgba(0,0,0,0.55),inset 0 0.5px 0 rgba(255,255,255,0.12)}
+#search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);pointer-events:none;opacity:.35;display:flex}
+#search-results{width:100%;margin-top:6px;background:rgba(18,18,28,0.72);backdrop-filter:blur(32px) saturate(180%);-webkit-backdrop-filter:blur(32px) saturate(180%);border:0.5px solid rgba(255,255,255,0.12);border-radius:14px;overflow:hidden;display:none;box-shadow:0 16px 48px rgba(0,0,0,0.55)}
+.sr-item{padding:10px 18px;font-family:"DM Sans",sans-serif;font-size:12px;font-weight:300;color:rgba(245,240,232,0.75);cursor:pointer;border-bottom:0.5px solid rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:space-between;gap:8px}
+.sr-item:last-child{border-bottom:none}
+.sr-item:hover,.sr-item.active{background:rgba(255,255,255,0.08);color:rgba(245,240,232,0.95)}
+.sr-lga{font-size:9px;letter-spacing:.18em;color:rgba(255,255,255,0.22);text-transform:uppercase;flex-shrink:0}
+#park-tip{position:fixed;pointer-events:none;z-index:3000;display:none;background:rgba(12,28,12,0.62);backdrop-filter:blur(16px) saturate(160%);-webkit-backdrop-filter:blur(16px) saturate(160%);border:0.5px solid rgba(100,180,80,0.25);border-radius:8px;padding:7px 14px;font-family:"DM Sans",sans-serif;font-size:11px;font-weight:300;letter-spacing:.08em;color:rgba(180,230,160,0.85);transform:translate(14px,-50%);white-space:nowrap}
+
+#profile-overlay{display:none;position:fixed;inset:0;z-index:9999;background:#F5F1E8}
+#profile-iframe{width:100%;height:100%;border:none;display:block}
+
+</style>
+</head>
+<body>
+<div id="profile-overlay" style="display:none;position:fixed;inset:0;z-index:99999;background:#F5F1E8"><iframe id="profile-iframe" src="" style="width:100%;height:100%;border:none;display:block" title="Suburb profile"></iframe></div>
+<div id="park-tip">🌿 National Park / Nature Reserve</div>
+
+<div id="cursor"></div>
+<div id="ring"></div>
+<div id="map"></div>
+<div class="ui">
+  <div class="wm">Soon</div>
+  <div class="ct">Sydney &nbsp;&middot;&nbsp; 588 suburbs</div>
+  <div class="ht">Hover to explore &nbsp;&middot;&nbsp; Click for detail</div>
+  <div id="search-wrap">
+    <span id="search-icon"><svg width="15" height="15" viewBox="0 0 15 15" fill="none"><circle cx="6.5" cy="6.5" r="5" stroke="white" stroke-width="1.2"/><line x1="10.5" y1="10.5" x2="14" y2="14" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg></span>
+    <input id="search-input" type="text" placeholder="Search suburb..." autocomplete="off" spellcheck="false"/>
+    <div id="search-results"></div>
+  </div>
+</div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="data/geo.js"></script>
+<script src="data/cards.js"></script>
+<script>
+function clean(s){return(!s||s==='nan'||s==='None'||s.length<2)?'':s.trim();}
+function popup(name){
+  var c=CARDS[name.toUpperCase()];
+  if(!c) return '<div class="sp"><div class="sp-h"><div class="nm">'+name+'</div></div></div>';
+  var meta=[c.lga,c.transport].filter(Boolean).join(' &nbsp;&middot;&nbsp; ');
+  var html='<div class="sp">';
+  html+='<div class="sp-h"><div class="nm">'+name+'</div>'+(meta?'<div class="meta">'+meta+'</div>':'')+'</div>';
+  var ch=clean(c.character);
+  if(ch) html+='<div class="sp-char">'+ch+'</div>';
+  var sts=(c.standouts||[]).filter(Boolean);
+  if(sts.length){
+    html+='<div class="sp-standouts">';
+    sts.forEach(function(s){
+      var m=s.match(/^(\S+)\s(.+)$/);
+      var ic=m?m[1]:'',txt=m?m[2]:s;
+      html+='<div class="sp-st"><span class="ic">'+ic+'</span><span>'+txt+'</span></div>';
+    });
+    html+='</div>';
+  }
+  var ps=(c.personas||[]).filter(function(p){return clean(p.name);});
+  if(ps.length){
+    var p=ps[0],like=clean(p.like),dis=clean(p.dislike);
+    html+='<div class="sp-persona"><div class="sp-who">Who lives here</div>'
+      +'<div class="sp-pname">'+p.name+'</div>';
+    if(like) html+='<div class="sp-q pos"><span class="ql">Loves it</span>'+like+'</div>';
+    if(dis)  html+='<div class="sp-q neg"><span class="ql">Frustrates</span>'+dis+'</div>';
+    html+='</div>';
+  }
+  var rows=[];
+  if(c.house_p||c.unit_p){
+    var t='';
+    if(c.house_p) t+='<span class="lbl">Buy</span><strong>'+c.house_br+' house &mdash; '+c.house_p+'</strong>';
+    if(c.unit_p) t+=' &nbsp;&middot;&nbsp; '+c.unit_br+' unit &mdash; '+c.unit_p;
+    if(c.price_ctx) t+=' ('+c.price_ctx+')';
+    rows.push({ic:'🏠',t:t});
+  }
+  if(c.rent){
+    var t='<span class="lbl">Rent</span><strong>1-bed &mdash; '+c.rent+'</strong>';
+    if(c.rent_growth) t+=' &nbsp;&middot;&nbsp; up '+c.rent_growth+' since 2021';
+    if(c.rent_unit) t+=' &nbsp;&middot;&nbsp; 2-bed &mdash; '+c.rent_unit;
+    rows.push({ic:'📈',t:t});
+  }
+  if(c.growth_pct&&c.growth_label){
+    rows.push({ic:'📊',t:'<span class="lbl">Growth</span>House prices <strong>'+c.growth_pct+'</strong> '+c.growth_label+' (NSW VG \u2192 CoreLogic)'});
+  }
+  var hasWater=(c.standouts||[]).some(function(s){return s&&s.indexOf('\uD83C\uDF0A')===0;});
+  if(c.wf_story&&!hasWater) rows.push({ic:'🌊',t:c.wf_story});
+  if(rows.length){
+    html+='<div class="sp-prices">';
+    rows.forEach(function(r){html+='<div class="sp-pr"><span class="ic">'+r.ic+'</span><span>'+r.t+'</span></div>';});
+    html+='</div>';
+  }
+  html+='<div class="sp-src">Prices: CoreLogic Mar 2025 &nbsp;&middot;&nbsp; Growth: NSW VG 2021 \u2192 CoreLogic 2025 &nbsp;&middot;&nbsp; Rent: SQM Apr 2026</div>';
+  // Weather + profile button for Glebe
+  if(name.toUpperCase()==='GLEBE'){
+    html+='<div id="popup-live" style="padding:8px 14px 6px;border-top:.5px solid rgba(45,42,36,.1);margin-top:6px;display:flex;gap:16px;align-items:center">'
+      +'<span id="popup-wx" style="font-size:10px;font-weight:300;color:rgba(45,42,36,.6)">⋯ loading…</span>'
+      +'<span id="popup-sst" style="font-size:10px;font-weight:300;color:rgba(45,42,36,.6)"></span>'
+      +'</div>'
+
+    setTimeout(function(){
+      var icons={0:'☀️',1:'🌤',2:'⛅',3:'☁️',45:'🌫',51:'🌦',53:'🌧',61:'🌦',63:'🌧',65:'⛈',80:'🌦',95:'⛈'};
+      fetch('https://api.open-meteo.com/v1/forecast?latitude=-33.88&longitude=151.19&current=temperature_2m,weather_code,wind_speed_10m&timezone=Australia%2FSydney')
+        .then(function(r){return r.json()})
+        .then(function(d){
+          var c=d.current,ic=icons[c.weather_code]||'🌡';
+          var wx=document.getElementById('popup-wx');
+          if(wx) wx.textContent=ic+' '+Math.round(c.temperature_2m)+'°C  ·  '+Math.round(c.wind_speed_10m)+' km/h wind';
+        }).catch(function(){});
+      fetch('https://marine-api.open-meteo.com/v1/marine?latitude=-33.86&longitude=151.22&current=sea_surface_temperature,wave_height&timezone=Australia%2FSydney')
+        .then(function(r){return r.json()})
+        .then(function(d){
+          var c=d.current;
+          var sst=document.getElementById('popup-sst');
+          if(sst&&c.sea_surface_temperature){
+            var wh=c.wave_height,wdesc=wh<0.1?'glassy':wh<0.5?'calm':wh<1?'small chop':'moderate swell';
+            sst.textContent='🌊 '+Math.round(c.sea_surface_temperature*10)/10+'°C · '+wdesc;
+          }
+        }).catch(function(){});
+    },200);
+  }
+  // Universal: embedded divs for Glebe/Kirribilli; auto-detect .html for all others
+  var EMBEDDED={};
+  var nameUC=name.toUpperCase();
+  var slug=name.toLowerCase().replace(/ /g,'-');
+  if(EMBEDDED[nameUC]){
+    html+='<div style="padding:4px 14px 12px;border-top:.5px solid rgba(45,42,36,.1);margin-top:6px">'
+      +'<button data-profile="'+EMBEDDED[nameUC]+'" style="width:100%;padding:8px 0;background:#2D2A24;color:#F5F1E8;border:none;cursor:pointer;font-family:DM Sans,sans-serif;font-size:9px;font-weight:300;letter-spacing:.2em;text-transform:uppercase">Full profile \u2192</button>'
+      +'</div>';
+  } else {
+    var pfid='pfbtn-'+slug;
+    html+='<div id="'+pfid+'" style="padding:4px 14px 12px;border-top:.5px solid rgba(45,42,36,.1);margin-top:6px;display:none">'
+      +'<button data-src="'+slug+'.html" style="width:100%;padding:8px 0;background:#2D2A24;color:#F5F1E8;border:none;cursor:pointer;font-family:DM Sans,sans-serif;font-size:9px;font-weight:300;letter-spacing:.2em;text-transform:uppercase">Full profile \u2192</button>'
+      +'</div>';
+    (function(id,file){
+      fetch(file,{method:'HEAD'}).then(function(r){
+        if(r.ok){var d=document.getElementById(id);if(d)d.style.display='block';}
+      }).catch(function(){});
+    })(pfid,slug+'.html');
+  }
+  return html+'</div>';
+}
+var cur=document.getElementById('cursor'),ring=document.getElementById('ring');
+var mx=innerWidth/2,my=innerHeight/2,rx=mx,ry=my;
+document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function loop(){rx+=(mx-rx)*.09;ry+=(my-ry)*.09;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop);})();
+var map=L.map('map',{center:[-33.87,151.12],zoom:11,zoomControl:true,attributionControl:false,preferCanvas:true});
+L.control.zoom({position:'bottomright'}).addTo(map);
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19}).addTo(map);
+var S={color:'rgba(255,112,56,0.5)',weight:0.8,fill:true,fillColor:'rgba(255,112,56,0)',fillOpacity:0,opacity:0.75};
+var H={color:'rgba(255,140,70,1)',weight:1.5,fillColor:'rgba(255,112,56,0.1)',fillOpacity:1,opacity:1};
+var gl=L.geoJSON(GEO,{
+  style:function(){return Object.assign({},S);},
+  onEachFeature:function(feat,layer){
+    var name=feat.properties.name||'';
+    if(!name) return;
+    layer.bindTooltip(name,{sticky:true,direction:'top',offset:[0,-8],className:'stip'});
+    layer.on('mouseover',function(){layer.setStyle(H);layer.bringToFront();});
+    layer.on('mouseout',function(){gl.resetStyle(layer);});
+    layer.on('click',function(e){
+      L.popup({closeButton:true,maxWidth:340,className:''}).setLatLng(e.latlng).setContent(popup(name)).openOn(map);
+    });
+  }
+}).addTo(map);
+
+// National Park hover label
+var parkTip = document.getElementById('park-tip');
+var overSuburb = false;
+
+gl.on('mouseover', function(){ overSuburb = true; parkTip.style.display='none'; });
+gl.on('mouseout',  function(){ overSuburb = false; });
+
+map.on('mousemove', function(e){
+  if(overSuburb){
+    parkTip.style.display='none';
+    return;
+  }
+  // Only show within Sydney bounds
+  var lat=e.latlng.lat, lng=e.latlng.lng;
+  if(lat < -34.2 || lat > -33.4 || lng < 150.4 || lng > 151.4){
+    parkTip.style.display='none';
+    return;
+  }
+  parkTip.style.display='block';
+  parkTip.style.left = e.originalEvent.clientX + 'px';
+  parkTip.style.top  = e.originalEvent.clientY + 'px';
+});
+
+map.on('mouseout', function(){
+  parkTip.style.display='none';
+});
+
+function openProfile(id){
+  var el=document.getElementById(id||'glebe-profile');
+  el.style.display='block';
+  document.body.style.overflow='hidden';
+  el.scrollTop=0;
+}
+function closeProfile(){
+  ['glebe-profile','kirribilli-profile'].forEach(function(id){document.getElementById(id).style.display='none';});
+  document.body.style.overflow='';
+}
+function closeIframeProfile(){
+  var ov=document.getElementById('profile-overlay');
+  if(ov){ov.style.display='none';document.getElementById('profile-iframe').src='';}
+  document.body.style.overflow='';
+}
+function openIframeProfile(src){
+  var ov=document.getElementById('profile-overlay');
+  var fr=document.getElementById('profile-iframe');
+  fr.src=src;
+  ov.style.display='block';
+  document.body.style.overflow='hidden';
+}
+window.addEventListener('message',function(e){
+  if(e.data==='closeIframeProfile')closeIframeProfile();
+});
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'){
+    closeProfile();
+    closeIframeProfile();
+  }
+});
+document.addEventListener('click',function(e){
+  var btn=e.target.closest('[data-profile],[data-src]');
+  if(btn){
+    var src=btn.getAttribute('data-src');
+    var pid=btn.getAttribute('data-profile');
+    if(src){openIframeProfile(src);}
+    else if(pid){openProfile(pid);}
+  }
+});
+
+// Search — fixed
+(function(){
+  var inp=document.getElementById('search-input');
+  var res=document.getElementById('search-results');
+  // Build suburb list from CARDS
+  var list=Object.keys(CARDS).map(function(k){
+    return {key:k, name:CARDS[k].name||k, lga:CARDS[k].lga||''};
+  }).sort(function(a,b){return a.name.localeCompare(b.name);});
+  var sel=-1;
+  function render(q){
+    q=(q||'').trim().toLowerCase();
+    res.innerHTML=''; res.style.display='none'; sel=-1;
+    if(!q) return;
+    var hits=list.filter(function(s){
+      return s.name.toLowerCase().startsWith(q);
+    }).concat(list.filter(function(s){
+      return !s.name.toLowerCase().startsWith(q) && s.name.toLowerCase().includes(q);
+    })).slice(0,8);
+    if(!hits.length) return;
+    hits.forEach(function(h){
+      var d=document.createElement('div');
+      d.className='sr-item';
+      d.dataset.name=h.name;
+      d.innerHTML='<span>'+h.name+'</span><span class="sr-lga">'+h.lga+'</span>';
+      d.addEventListener('mousedown',function(e){e.preventDefault();go(h.name);});
+      res.appendChild(d);
+    });
+    res.style.display='block';
+  }
+  function go(name){
+    inp.value=name; res.style.display='none'; inp.blur();
+    var KEY=name.toUpperCase();
+    gl.eachLayer(function(layer){
+      var fn=layer.feature&&layer.feature.properties&&layer.feature.properties.name;
+      if(fn&&fn.toUpperCase()===KEY){
+        var c=layer.getBounds?layer.getBounds().getCenter():layer.getLatLng();
+        map.setView(c,14,{animate:true});
+        setTimeout(function(){
+          L.popup({closeButton:true,maxWidth:340,className:''}).setLatLng(c).setContent(popup(fn)).openOn(map);
+        },400);
+      }
+    });
+  }
+  inp.addEventListener('input',function(){render(inp.value);});
+  inp.addEventListener('keydown',function(e){
+    var items=[].slice.call(res.querySelectorAll('.sr-item'));
+    if(!items.length) return;
+    if(e.key==='ArrowDown'){e.preventDefault();sel=Math.min(sel+1,items.length-1);}
+    else if(e.key==='ArrowUp'){e.preventDefault();sel=Math.max(sel-1,-1);}
+    else if(e.key==='Enter'){
+      var t=sel>=0?items[sel]:items[0];
+      if(t) go(t.dataset.name);
+      return;
+    }
+    else if(e.key==='Escape'){res.style.display='none'; inp.blur(); return;}
+    items.forEach(function(x,i){x.classList.toggle('active',i===sel);});
+  });
+  inp.addEventListener('focus',function(){if(inp.value)render(inp.value);});
+  document.addEventListener('click',function(e){
+    if(!document.getElementById('search-wrap').contains(e.target)) res.style.display='none';
+  });
+})();
+</script>
+</body>
+</html>
