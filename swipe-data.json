@@ -1,0 +1,565 @@
+{
+  "version": "1.0",
+  "total_cards": 72,
+  "suburbs_tagged": 12,
+  "tag_axes": [
+    "environment",
+    "time",
+    "pace",
+    "activity",
+    "social",
+    "income",
+    "vibe",
+    "transport"
+  ],
+  "suburbs": {
+    "Avalon Beach": {
+      "vector": {
+        "coastal": 0.9,
+        "morning": 0.75,
+        "quiet": 0.72,
+        "wellness": 0.65,
+        "premium": 0.78,
+        "urban": 0.05,
+        "grounded": 0.12,
+        "community": 0.6,
+        "nature": 0.82,
+        "social": 0.45,
+        "family": 0.55,
+        "creative": 0.4
+      },
+      "cards": [
+        {
+          "label": "On the water",
+          "tags": {
+            "environment": "coastal",
+            "time": "daytime",
+            "pace": "quiet",
+            "activity": "leisure",
+            "social": "solo",
+            "income": "premium",
+            "vibe": "outdoorsy",
+            "transport": "water"
+          }
+        },
+        {
+          "label": "Surf club morning",
+          "tags": {
+            "environment": "coastal",
+            "time": "morning",
+            "pace": "social",
+            "activity": "sport",
+            "social": "community",
+            "income": "mid",
+            "vibe": "outdoorsy",
+            "transport": "walkable"
+          }
+        },
+        {
+          "label": "Surfing",
+          "tags": {
+            "environment": "coastal",
+            "time": "daytime",
+            "pace": "active",
+            "activity": "sport",
+            "social": "group",
+            "income": "mid",
+            "vibe": "outdoorsy",
+            "transport": "walkable"
+          }
+        },
+        {
+          "label": "Beach yoga at sunrise",
+          "tags": {
+            "environment": "coastal",
+            "time": "morning",
+            "pace": "slow",
+            "activity": "wellness",
+            "social": "couple",
+            "income": "mid",
+            "vibe": "outdoorsy",
+            "transport": "walkable"
+          }
+        },
+        {
+          "label": "Painting by the sea",
+          "tags": {
+            "environment": "coastal",
+            "time": "daytime",
+            "pace": "slow",
+            "activity": "culture",
+            "social": "couple",
+            "income": "mid",
+            "vibe": "creative",
+            "transport": "car"
+          }
+        },
+        {
+          "label": "Sundowners on the water",
+          "tags": {
+            "environment": "coastal",
+            "time": "evening",
+            "pace": "quiet",
+            "activity": "leisure",
+            "social": "couple",
+            "income": "premium",
+            "vibe": "outdoorsy",
+            "transport": "water"
+          }
+        }
+      ]
+    },
+    "Glebe": {
+      "vector": {
+        "coastal": 0.1,
+        "morning": 0.55,
+        "quiet": 0.35,
+        "wellness": 0.45,
+        "premium": 0.4,
+        "urban": 0.8,
+        "grounded": 0.3,
+        "community": 0.65,
+        "nature": 0.35,
+        "social": 0.75,
+        "family": 0.3,
+        "creative": 0.7,
+        "culture": 0.78,
+        "evening": 0.6,
+        "bohemian": 0.65
+      },
+      "cards": [
+        {
+          "label": "Jazz in a small bar",
+          "tags": {
+            "environment": "urban",
+            "time": "evening",
+            "pace": "social",
+            "activity": "culture",
+            "social": "couple",
+            "income": "mid",
+            "vibe": "bohemian",
+            "transport": "walkable"
+          }
+        },
+        {
+          "label": "Rowing at sunset",
+          "tags": {
+            "environment": "urban",
+            "time": "evening",
+            "pace": "active",
+            "activity": "sport",
+            "social": "group",
+            "income": "mid",
+            "vibe": "professional",
+            "transport": "water"
+          }
+        },
+        {
+          "label": "Saturday market",
+          "tags": {
+            "environment": "urban",
+            "time": "morning",
+            "pace": "social",
+            "activity": "culture",
+            "social": "group",
+            "income": "mid",
+            "vibe": "bohemian",
+            "transport": "walkable"
+          }
+        },
+        {
+          "label": "Sunrise yoga",
+          "tags": {
+            "environment": "urban",
+            "time": "morning",
+            "pace": "slow",
+            "activity": "wellness",
+            "social": "group",
+            "income": "mid",
+            "vibe": "professional",
+            "transport": "walkable"
+          }
+        },
+        {
+          "label": "Saturday rugby",
+          "tags": {
+            "environment": "urban",
+            "time": "daytime",
+            "pace": "active",
+            "activity": "sport",
+            "social": "community",
+            "income": "mid",
+            "vibe": "professional",
+            "transport": "walkable"
+          }
+        },
+        {
+          "label": "Dogs in the park",
+          "tags": {
+            "environment": "nature",
+            "time": "morning",
+            "pace": "quiet",
+            "activity": "leisure",
+            "social": "group",
+            "income": "mid",
+            "vibe": "homely",
+            "transport": "walkable"
+          }
+        }
+      ]
+    },
+    "Surry Hills": {
+      "vector": {
+        "coastal": 0.02,
+        "morning": 0.8,
+        "quiet": 0.15,
+        "wellness": 0.72,
+        "premium": 0.7,
+        "urban": 0.95,
+        "grounded": 0.1,
+        "community": 0.4,
+        "nature": 0.15,
+        "social": 0.65,
+        "family": 0.15,
+        "creative": 0.6,
+        "culture": 0.75,
+        "evening": 0.55,
+        "professional": 0.7
+      },
+      "cards": [
+        {
+          "label": "Laps before work",
+          "tags": {
+            "environment": "urban",
+            "time": "morning",
+            "pace": "active",
+            "activity": "wellness",
+            "social": "solo",
+            "income": "premium",
+            "vibe": "professional",
+            "transport": "walkable"
+          }
+        },
+        {
+          "label": "Vintage market",
+          "tags": {
+            "environment": "urban",
+            "time": "morning",
+            "pace": "social",
+            "activity": "culture",
+            "social": "group",
+            "income": "mid",
+            "vibe": "creative",
+            "transport": "walkable"
+          }
+        },
+        {
+          "label": "Reformer Pilates",
+          "tags": {
+            "environment": "urban",
+            "time": "morning",
+            "pace": "active",
+            "activity": "wellness",
+            "social": "group",
+            "income": "premium",
+            "vibe": "professional",
+            "transport": "walkable"
+          }
+        },
+        {
+          "label": "Basketball with friends",
+          "tags": {
+            "environment": "urban",
+            "time": "daytime",
+            "pace": "active",
+            "activity": "sport",
+            "social": "group",
+            "income": "mid",
+            "vibe": "professional",
+            "transport": "walkable"
+          }
+        },
+        {
+          "label": "The neighbourhood hike",
+          "tags": {
+            "environment": "urban",
+            "time": "morning",
+            "pace": "active",
+            "activity": "leisure",
+            "social": "solo",
+            "income": "mid",
+            "vibe": "professional",
+            "transport": "walkable"
+          }
+        },
+        {
+          "label": "Morning coffee ritual",
+          "tags": {
+            "environment": "urban",
+            "time": "morning",
+            "pace": "slow",
+            "activity": "food",
+            "social": "group",
+            "income": "premium",
+            "vibe": "professional",
+            "transport": "walkable"
+          }
+        }
+      ]
+    },
+    "Riverwood": {
+      "vector": {
+        "coastal": 0.02,
+        "morning": 0.55,
+        "quiet": 0.4,
+        "wellness": 0.3,
+        "premium": 0.1,
+        "urban": 0.6,
+        "grounded": 0.85,
+        "community": 0.7,
+        "nature": 0.55,
+        "social": 0.55,
+        "family": 0.65,
+        "creative": 0.15,
+        "culture": 0.35,
+        "evening": 0.45,
+        "transit": 0.8
+      },
+      "cards": [
+        {
+          "label": "Cycling before breakfast",
+          "tags": {
+            "environment": "nature",
+            "time": "morning",
+            "pace": "active",
+            "activity": "sport",
+            "social": "solo",
+            "income": "mid",
+            "vibe": "outdoorsy",
+            "transport": "walkable"
+          }
+        },
+        {
+          "label": "Walking the wetlands",
+          "tags": {
+            "environment": "nature",
+            "time": "morning",
+            "pace": "slow",
+            "activity": "leisure",
+            "social": "couple",
+            "income": "mid",
+            "vibe": "homely",
+            "transport": "walkable"
+          }
+        },
+        {
+          "label": "Outdoor gym",
+          "tags": {
+            "environment": "suburban",
+            "time": "morning",
+            "pace": "active",
+            "activity": "wellness",
+            "social": "group",
+            "income": "grounded",
+            "vibe": "homely",
+            "transport": "walkable"
+          }
+        },
+        {
+          "label": "Saturday soccer",
+          "tags": {
+            "environment": "suburban",
+            "time": "daytime",
+            "pace": "active",
+            "activity": "sport",
+            "social": "community",
+            "income": "grounded",
+            "vibe": "homely",
+            "transport": "car"
+          }
+        },
+        {
+          "label": "Studying at the library",
+          "tags": {
+            "environment": "urban",
+            "time": "daytime",
+            "pace": "quiet",
+            "activity": "work",
+            "social": "solo",
+            "income": "grounded",
+            "vibe": "homely",
+            "transport": "transit"
+          }
+        },
+        {
+          "label": "Noodles after work",
+          "tags": {
+            "environment": "suburban",
+            "time": "evening",
+            "pace": "slow",
+            "activity": "food",
+            "social": "couple",
+            "income": "grounded",
+            "vibe": "homely",
+            "transport": "transit"
+          }
+        }
+      ]
+    },
+    "Manly": {
+      "vector": {
+        "coastal": 0.95,
+        "morning": 0.7,
+        "quiet": 0.4,
+        "wellness": 0.6,
+        "premium": 0.85,
+        "urban": 0.45,
+        "grounded": 0.1,
+        "community": 0.55,
+        "nature": 0.7,
+        "social": 0.65,
+        "family": 0.5,
+        "creative": 0.3,
+        "water": 0.8,
+        "ferry": 0.9
+      },
+      "cards": []
+    },
+    "Bondi Beach": {
+      "vector": {
+        "coastal": 0.98,
+        "morning": 0.75,
+        "quiet": 0.2,
+        "wellness": 0.65,
+        "premium": 0.8,
+        "urban": 0.6,
+        "grounded": 0.1,
+        "community": 0.45,
+        "nature": 0.55,
+        "social": 0.8,
+        "family": 0.3,
+        "creative": 0.5
+      },
+      "cards": []
+    },
+    "Mosman": {
+      "vector": {
+        "coastal": 0.6,
+        "morning": 0.65,
+        "quiet": 0.65,
+        "wellness": 0.55,
+        "premium": 0.95,
+        "urban": 0.3,
+        "grounded": 0.05,
+        "community": 0.5,
+        "nature": 0.55,
+        "social": 0.45,
+        "family": 0.7,
+        "creative": 0.25
+      },
+      "cards": []
+    },
+    "Kirribilli": {
+      "vector": {
+        "coastal": 0.7,
+        "morning": 0.65,
+        "quiet": 0.6,
+        "wellness": 0.5,
+        "premium": 0.9,
+        "urban": 0.5,
+        "grounded": 0.05,
+        "community": 0.4,
+        "nature": 0.45,
+        "social": 0.45,
+        "family": 0.55,
+        "ferry": 0.95
+      },
+      "cards": []
+    },
+    "Newtown": {
+      "vector": {
+        "coastal": 0.02,
+        "morning": 0.55,
+        "quiet": 0.2,
+        "wellness": 0.4,
+        "premium": 0.3,
+        "urban": 0.9,
+        "grounded": 0.45,
+        "community": 0.8,
+        "nature": 0.2,
+        "social": 0.85,
+        "family": 0.2,
+        "creative": 0.9,
+        "bohemian": 0.85,
+        "culture": 0.88,
+        "train": 0.9
+      },
+      "cards": []
+    },
+    "Marrickville": {
+      "vector": {
+        "coastal": 0.02,
+        "morning": 0.5,
+        "quiet": 0.25,
+        "wellness": 0.35,
+        "premium": 0.25,
+        "urban": 0.88,
+        "grounded": 0.6,
+        "community": 0.8,
+        "nature": 0.3,
+        "social": 0.8,
+        "family": 0.35,
+        "creative": 0.8,
+        "food": 0.85,
+        "bohemian": 0.75,
+        "metro": 0.85
+      },
+      "cards": []
+    },
+    "Paddington": {
+      "vector": {
+        "coastal": 0.15,
+        "morning": 0.65,
+        "quiet": 0.45,
+        "wellness": 0.55,
+        "premium": 0.85,
+        "urban": 0.75,
+        "grounded": 0.08,
+        "community": 0.45,
+        "nature": 0.25,
+        "social": 0.6,
+        "family": 0.4,
+        "creative": 0.65,
+        "heritage": 0.9,
+        "culture": 0.72
+      },
+      "cards": []
+    },
+    "Mona Vale": {
+      "vector": {
+        "coastal": 0.85,
+        "morning": 0.7,
+        "quiet": 0.55,
+        "wellness": 0.55,
+        "premium": 0.65,
+        "urban": 0.4,
+        "grounded": 0.3,
+        "community": 0.65,
+        "nature": 0.7,
+        "social": 0.55,
+        "family": 0.6,
+        "surf": 0.7,
+        "bline": 0.9
+      },
+      "cards": []
+    }
+  },
+  "algorithm": {
+    "cards_per_session": 16,
+    "info_gain_weight": 0.6,
+    "suburb_balance_weight": 0.4,
+    "swipe_right_score": 2,
+    "swipe_left_score": -1,
+    "match_method": "cosine_similarity"
+  }
+}
