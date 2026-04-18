@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Avalon Beach — From Spaces to Places</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F5F1E8;--bg2:#E8E3D8;--dark:#2D2A24;--ink2:rgba(45,42,36,.78);--ink3:#7A6D5E;--accent:#5C4A3A;--h:rgba(45,42,36,.1);--gr:#4a7a4a;--am:#8a6020;--rd:#8a3030}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--dark);font-family:'DM Sans',sans-serif;font-weight:300;-webkit-font-smoothing:antialiased}
+nav{padding:16px 40px;display:flex;justify-content:space-between;align-items:center;border-bottom:.5px solid var(--h)}
+.back{font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink3);text-decoration:none;display:flex;align-items:center;gap:5px}
+.hero{position:relative;height:460px;overflow:hidden;border-bottom:.5px solid var(--h)}
+.hero img{width:100%;height:100%;object-fit:cover;object-position:center 40%;filter:saturate(.7) contrast(1.06);mix-blend-mode:multiply}
+.hero-grad{position:absolute;inset:0;background:linear-gradient(to top,rgba(245,241,232,.96) 0%,rgba(245,241,232,.6) 35%,rgba(245,241,232,0) 65%)}
+.hero-name{position:absolute;bottom:0;left:0;padding:0 40px 36px;font-family:'Cormorant Garamond',serif;font-size:120px;font-weight:300;font-style:italic;line-height:.85;color:var(--dark);letter-spacing:-.02em}
+.hero-badge{position:absolute;top:28px;right:40px;text-align:right}
+.hero-badge p{font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink3);line-height:2.4}
+.canvas{display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:auto;border-left:.5px solid var(--h)}
+.cell{border-right:.5px solid var(--h);border-bottom:.5px solid var(--h);padding:28px 28px}
+.s-big{grid-column:span 3;padding:32px 28px;position:relative;overflow:hidden}
+.s-ghost{position:absolute;bottom:-20px;right:-8px;font-family:'Cormorant Garamond',serif;font-size:140px;font-weight:600;color:rgba(45,42,36,.04);line-height:1;pointer-events:none}
+.s-lbl{font-size:7px;letter-spacing:.26em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px}
+.s-num{font-family:'Cormorant Garamond',serif;font-size:60px;font-weight:300;color:var(--dark);line-height:1;margin-bottom:6px}
+.s-unit{font-size:22px;font-weight:200;color:var(--ink3)}
+.s-desc{font-size:10px;font-weight:300;color:var(--ink2);line-height:1.6;margin-top:4px}
+.char-cell{grid-column:span 12;padding:28px 40px;background:var(--bg2);display:grid;grid-template-columns:1fr auto;gap:48px;align-items:center}
+.char-q{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;font-style:italic;color:var(--dark);line-height:1.45}
+.char-tags{display:flex;gap:6px;flex-wrap:wrap;max-width:280px;justify-content:flex-end}
+.tag{font-size:7px;letter-spacing:.14em;text-transform:uppercase;padding:4px 10px;border:.5px solid var(--h);color:var(--ink3)}
+.lcat{grid-column:span 3;padding:24px 24px}
+.lcat h3{font-size:7px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;padding-bottom:8px;border-bottom:.5px solid var(--h)}
+.sr{display:flex;align-items:center;gap:8px;margin-bottom:9px}
+.sl{font-size:9px;font-weight:300;color:var(--ink2);width:100px;flex-shrink:0}
+.bw{flex:1;height:1.5px;background:rgba(45,42,36,.08)}
+.b{height:100%}
+.pill{font-size:6px;letter-spacing:.08em;padding:2px 6px;border-radius:20px;white-space:nowrap;text-transform:uppercase}
+.pe{background:rgba(74,122,74,.14);color:var(--gr)}
+.ph{background:rgba(74,122,74,.09);color:#5a8a5a}
+.pg{background:rgba(138,96,32,.12);color:var(--am)}
+.pm{background:rgba(138,48,48,.1);color:var(--rd)}
+.pp{background:rgba(138,48,48,.16);color:#9a2020}
+.pa{background:rgba(45,42,36,.08);color:var(--ink3)}
+.scores-cell{grid-column:span 12;padding:0;display:grid;grid-template-columns:repeat(4,1fr);border-bottom:.5px solid var(--h)}
+.score{padding:18px 24px;border-right:.5px solid var(--h);display:flex;align-items:center;gap:16px}
+.score:last-child{border-right:none}
+.score-n{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;color:var(--dark)}
+.score-n span{font-size:14px;font-weight:200;color:var(--ink3)}
+.score-bar-wrap{flex:1}
+.score-cat{font-size:7px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px}
+.score-bar{height:2px;background:rgba(45,42,36,.08);border-radius:1px}
+.score-fill{height:100%;border-radius:1px}
+.wh-label{grid-column:span 4;padding:28px 24px;display:flex;align-items:flex-start}
+.wh-label span{font-size:7px;letter-spacing:.26em;text-transform:uppercase;color:var(--ink3);writing-mode:vertical-rl;transform:rotate(180deg)}
+.wh-col{grid-column:span 2;padding:24px 20px}
+.wh-col h4{font-size:7px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.wh-col .title{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:400;font-style:italic;color:var(--dark);margin-bottom:10px;line-height:1.2}
+.wh-col p{font-size:10px;font-weight:300;color:var(--ink2);line-height:1.65}
+.life-head{grid-column:span 12;padding:24px 28px 20px;border-bottom:.5px solid var(--h);display:flex;align-items:baseline;gap:16px}
+.life-head h2{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;font-style:italic;color:var(--dark)}
+.life-head span{font-size:7px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink3)}
+.le{grid-column:span 4;padding:24px 24px}
+.le .n{font-family:'Cormorant Garamond',serif;font-size:56px;font-weight:600;color:rgba(45,42,36,.06);line-height:1;margin-bottom:-8px}
+.le h4{font-size:7px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.le p{font-size:11px;font-weight:300;color:var(--ink2);line-height:1.75}
+.le strong{font-weight:400;color:var(--dark)}
+.hob-head{grid-column:span 12;padding:20px 28px 16px;border-bottom:.5px solid var(--h);display:flex;align-items:baseline;gap:12px}
+.hob-head h2{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;font-style:italic;color:var(--dark)}
+.hob-head span{font-size:7px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink3)}
+.hob{grid-column:span 2;padding:20px 20px;background:var(--bg2)}
+.hob .hn{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:rgba(45,42,36,.12);line-height:1;margin-bottom:6px}
+.hob h4{font-size:7px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:7px}
+.hob p{font-size:10px;font-weight:300;color:rgba(45,42,36,.78);line-height:1.65}
+.v-head{grid-column:span 12;padding:24px 28px 20px;border-bottom:.5px solid var(--h);display:flex;align-items:baseline;gap:16px}
+.v-head h2{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;font-style:italic;color:var(--dark)}
+.voice{grid-column:span 4;padding:24px 24px}
+.vp{font-size:7px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink3);margin-bottom:3px}
+.vr{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:400;font-style:italic;color:var(--dark);margin-bottom:18px}
+.vq{padding:11px 0;border-bottom:.5px solid var(--h)}
+.vq:last-child{border-bottom:none;padding-bottom:0}
+.vt{font-size:7px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink3);margin-bottom:5px}
+.vx{font-family:'Cormorant Garamond',serif;font-size:12px;font-style:italic;color:var(--ink2);line-height:1.55}
+.vx.l{color:var(--dark);font-weight:400}
+.prop-dark{grid-column:span 12;background:var(--dark);display:grid;grid-template-columns:repeat(12,1fr);border-bottom:.5px solid rgba(255,255,255,.06)}
+.prop-hd{grid-column:span 2;padding:32px 24px;border-right:.5px solid rgba(255,255,255,.07);display:flex;align-items:flex-end}
+.prop-hd span{font-size:8px;letter-spacing:.26em;text-transform:uppercase;color:rgba(255,255,255,.25);writing-mode:vertical-rl;transform:rotate(180deg)}
+.pc{grid-column:span 2;padding:28px 24px;border-right:.5px solid rgba(255,255,255,.07)}
+.pc:last-child{border-right:none;grid-column:span 4}
+.plbl{font-size:7px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:12px}
+.pval{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;color:#F5F1E8;line-height:1;margin-bottom:4px}
+.psub{font-size:9px;font-weight:200;color:rgba(255,255,255,.28);margin-bottom:8px}
+.pgrow{font-size:9px;color:#7eb87e}
+.pbar{margin-top:16px}
+.pbar-track{height:1.5px;background:rgba(255,255,255,.08);border-radius:1px;margin-bottom:4px}
+.pbar-fill{height:100%;border-radius:1px;background:rgba(126,184,126,.4)}
+.pbar-label{font-size:7px;color:rgba(255,255,255,.18);letter-spacing:.1em}
+.comm-head{grid-column:span 12;padding:22px 28px 18px;border-bottom:.5px solid var(--h);display:flex;align-items:baseline;gap:16px}
+.comm-head h2{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;font-style:italic;color:var(--dark)}
+.dblock{grid-column:span 3;padding:22px 22px}
+.dblock h3{font-size:7px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;padding-bottom:8px;border-bottom:.5px solid var(--h)}
+.drow{display:flex;padding:7px 0;border-bottom:.5px solid rgba(45,42,36,.05)}
+.drow:last-child{border-bottom:none}
+.dlbl{font-size:9px;color:var(--ink3);width:52%;flex-shrink:0}
+.dval{font-size:9px;font-weight:400;color:var(--ink2)}
+.upd-a{grid-column:span 5;padding:28px 28px;border-right:.5px solid var(--h)}
+.upd-a h2{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;font-style:italic;color:var(--dark);margin-bottom:14px}
+.upd-a p{font-size:11px;font-weight:300;color:var(--ink2);line-height:1.75}
+.upd-b{grid-column:span 7;padding:28px 28px;display:flex;flex-direction:column;gap:0}
+.ui{padding:14px 0;border-bottom:.5px solid var(--h);display:grid;grid-template-columns:140px 1fr;gap:16px}
+.ui:last-child{border-bottom:none}
+.ui-tag{font-size:7px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-top:2px}
+.ui-txt{font-size:10px;font-weight:300;color:var(--ink2);line-height:1.6}
+.ui-txt strong{font-weight:400;color:var(--dark)}
+.source{grid-column:span 12;padding:16px 28px;font-size:7px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);display:flex;gap:18px;flex-wrap:wrap}
+.source span::before{content:'- '}
+.source span:first-child::before{content:''}
+.wx-bar{display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:.5px solid var(--h)}
+.wx-cell{padding:14px 28px;border-right:.5px solid var(--h);display:flex;align-items:center;gap:12px}
+.wx-cell:last-child{border-right:none}
+.wx-icon{font-size:22px;line-height:1;flex-shrink:0}
+.wx-lbl{font-size:7px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink3);margin-bottom:4px}
+.wx-val{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--dark);line-height:1}
+.wx-sub{font-size:9px;font-weight:300;color:var(--ink3);margin-top:3px}
+</style>
+</head>
+<body>
+<nav>
+  <a class="back" href="#" onclick="try{window.parent.closeIframeProfile();}catch(e){window.parent.postMessage('closeIframeProfile','*');} return false;" style="display:flex;align-items:center;gap:5px;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink3);text-decoration:none">
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L3 6L8 10" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>
+    Back to Sydney
+  </a>
+  <span style="font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink3)">Northern Beaches Council &nbsp;&middot;&nbsp; 37 km from CBD &nbsp;&middot;&nbsp; April 2026</span>
+  <span style="font-size:8px;letter-spacing:.3em;text-transform:uppercase;color:var(--ink3)">From Spaces to Places</span>
+</nav>
+
+<div class="wx-bar">
+  <div class="wx-cell">
+    <div class="wx-icon" id="wx-icon">-</div>
+    <div><div class="wx-lbl">Avalon Beach now</div><div class="wx-val" id="wx-temp">--</div><div class="wx-sub" id="wx-desc">Loading...</div></div>
+  </div>
+  <div class="wx-cell">
+    <div class="wx-icon">&#127754;</div>
+    <div><div class="wx-lbl">Pacific Ocean</div><div class="wx-val" id="wx-sst">--</div><div class="wx-sub" id="wx-wave">Ocean conditions</div></div>
+  </div>
+  <div class="wx-cell">
+    <div><div class="wx-lbl">Wind</div><div class="wx-val" id="wx-wind">--</div><div class="wx-sub" id="wx-time">--</div></div>
+  </div>
+</div>
+<script>
+(function(){
+  var WX={0:'Clear sky',1:'Mainly clear',2:'Partly cloudy',3:'Overcast',45:'Foggy',51:'Light drizzle',53:'Drizzle',61:'Light rain',63:'Rain',65:'Heavy rain',80:'Showers',95:'Thunderstorm'};
+  var EM={0:'&#9728;&#65039;',1:'&#127780;',2:'&#9925;',3:'&#9729;&#65039;',45:'&#127787;',51:'&#127746;',53:'&#127783;',61:'&#127746;',63:'&#127783;',65:'&#9928;',80:'&#127746;',95:'&#9928;'};
+  var WV=function(h){if(h<0.1)return 'Glassy — perfect glass';if(h<0.5)return 'Rippled — easy paddle';if(h<1)return 'Small surf — 1–3ft';if(h<2)return 'Fun surf — 3–5ft';return 'Solid surf — pumping';};
+  fetch('https://api.open-meteo.com/v1/forecast?latitude=-33.635&longitude=151.337&current=temperature_2m,weather_code,wind_speed_10m&timezone=Australia%2FSydney')
+    .then(function(r){return r.json()}).then(function(d){
+      var c=d.current;
+      document.getElementById('wx-temp').textContent=Math.round(c.temperature_2m)+'C';
+      document.getElementById('wx-desc').textContent=WX[c.weather_code]||'Clear';
+      document.getElementById('wx-icon').innerHTML=EM[c.weather_code]||'&#9728;&#65039;';
+      document.getElementById('wx-wind').textContent=Math.round(c.wind_speed_10m)+' km/h';
+      var now=new Date();
+      document.getElementById('wx-time').textContent='Updated '+now.toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'});
+    }).catch(function(){});
+  fetch('https://marine-api.open-meteo.com/v1/marine?latitude=-33.64&longitude=151.34&current=wave_height,sea_surface_temperature&timezone=Australia%2FSydney')
+    .then(function(r){return r.json()}).then(function(d){
+      var c=d.current;
+      if(c.sea_surface_temperature) document.getElementById('wx-sst').textContent=Math.round(c.sea_surface_temperature*10)/10+'C';
+      if(c.wave_height!=null) document.getElementById('wx-wave').textContent=WV(c.wave_height)+' ('+Math.round(c.wave_height*10)/10+'m)';
+    }).catch(function(){});
+})();
+</script>
+
+<div style="display:grid;grid-template-columns:repeat(3,1fr);border-bottom:.5px solid var(--h)">
+  <div style="padding:24px 28px;border-right:.5px solid var(--h);display:flex;gap:12px;align-items:flex-start">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" style="color:var(--ink3);flex-shrink:0;margin-top:2px"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    <p style="font-size:11px;font-weight:300;color:rgba(45,42,36,.82);line-height:1.65">In the 1920s, developer AJ Small named the area after the mythical Isle of Avalon — King Arthur's final resting place — to evoke an earthly paradise. A branding exercise that stuck for a century, shaping the suburb's identity more powerfully than any planning document has managed since.</p>
+  </div>
+  <div style="padding:24px 28px;border-right:.5px solid var(--h);display:flex;gap:12px;align-items:flex-start">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" style="color:var(--ink3);flex-shrink:0;margin-top:2px"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+    <p style="font-size:11px;font-weight:300;color:rgba(45,42,36,.82);line-height:1.65">Despite its "surfie" reputation, Avalon has one of Sydney's highest concentrations of creative professionals — architects, writers, and designers — creating a demographic known as "glam-surf." The person in the lineup before you is as likely to be an award-winning designer as a professional surfer. Often both.</p>
+  </div>
+  <div style="padding:24px 28px;display:flex;gap:12px;align-items:flex-start">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" style="color:var(--ink3);flex-shrink:0;margin-top:2px"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+    <p style="font-size:11px;font-weight:300;color:rgba(45,42,36,.82);line-height:1.65">Avalon contains a rare spotted gum forest and significant koala habitat corridor — one of the few places in Sydney where canopy cover is protected by militant local preservationists. Development proposals here do not merely face council assessment. They face community members who have memorised the relevant environmental legislation and are not afraid to use it.</p>
+  </div>
+</div>
+
+<div class="hero">
+  <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" alt="Avalon Beach">
+  <div class="hero-grad"></div>
+  <div class="hero-name">Avalon Beach</div>
+  <div class="hero-badge">
+    <p>Northern Beaches Council</p>
+    <p>B-Line Bus &middot; Car &middot; No Train</p>
+    <p>April 2026</p>
+  </div>
+</div>
+
+<div style="border-bottom:.5px solid var(--h);display:grid;grid-template-columns:1fr 1fr;gap:0">
+  <div style="padding:40px 40px;border-right:.5px solid var(--h)">
+    <div style="font-size:7px;letter-spacing:.26em;text-transform:uppercase;color:var(--ink3);margin-bottom:20px">Portrait</div>
+    <p style="font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:300;font-style:italic;color:rgba(45,42,36,.82);line-height:1.8">Walking down Old Barrenjoey Road, the air smells of roasted coffee and sea salt. No high-rises. Instead: low-slung weatherboard storefronts and mid-century modern escapes tucked behind silver-top ash trees. The architecture is organic-luxe — expensive but intentionally understated. Linen is the dress code. Understated is the aesthetic. Both are enforced by social consensus rather than any formal regulation.</p>
+    <p style="font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:300;font-style:italic;color:rgba(45,42,36,.82);line-height:1.8;margin-top:16px">The rhythm is dictated by the swell. At 6am, the village is alive with surfers at Sneaky Grind grabbing long blacks. By Saturday midday: a parade of linen-clad families and vintage Land Rovers. Weeknights are eerily quiet — Avalon goes to bed early, save for the hum of a few bistro terraces.</p>
+  </div>
+  <div style="padding:40px 40px">
+    <div style="font-size:7px;letter-spacing:.26em;text-transform:uppercase;color:var(--ink3);margin-bottom:20px">&nbsp;</div>
+    <p style="font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:300;font-style:italic;color:rgba(45,42,36,.82);line-height:1.8">The paradox of Avalon is the "gated community without gates." Geographically isolated by a single access road, residents feel deeply connected to their neighbours but almost entirely detached from the rest of Sydney. This is a design feature, not a flaw. The isolation is the point. The suburb is called the Avalon Bubble — by its own residents, affectionately.</p>
+    <p style="font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:300;font-style:italic;color:rgba(45,42,36,.82);line-height:1.8;margin-top:16px">Avalon is becoming more permanent and less holiday. As remote work solidifies, mid-week energy has increased, turning what was once a sleepy weekend retreat into a bustling year-round creative hub. The suburb is evolving. Its residents are watching carefully to ensure it doesn't evolve too much.</p>
+  </div>
+</div>
+
+<div style="max-width:1200px;margin:0 auto">
+<div class="canvas">
+
+  <div class="s-big cell"><div class="s-ghost">37</div><div class="s-lbl">Distance from CBD</div><div class="s-num">37<span class="s-unit">km</span></div><div class="s-desc">B-Line bus to Wynyard — the social hub of the commuter population. Car is primary. 2.1 cars per household. 12.5 years average tenure — people arrive, adjust their schedule, and do not leave.</div></div>
+  <div class="s-big cell"><div class="s-ghost">Top</div><div class="s-lbl">Price percentile</div><div class="s-num">Top<span class="s-unit"> 5%</span></div><div class="s-desc">Median house $3.15M (+22% since 2021). Yield 2.8%. Vacancy 1.2%. The Northern Beaches suburb that remained a genuine secret until remote work made the distance irrelevant.</div></div>
+  <div class="s-big cell"><div class="s-ghost">44</div><div class="s-lbl">Median age</div><div class="s-num">44<span class="s-unit">yrs</span></div><div class="s-desc">Population ~10,500. Only 22% renting — among the lowest in Sydney. 42% tertiary educated. The "glam-surf" demographic: creative, established, and committed to staying.</div></div>
+
+  <div class="char-cell cell">
+    <div class="char-q">A hidden sandstone-fringed sanctuary that feels more like a coastal village in Byron Bay than a suburb of a global metropolis — isolated by design, sustained by community, and entirely indifferent to being discovered.</div>
+    <div class="char-tags"><span class="tag">Avalon SLSC</span><span class="tag">Bangalley Head</span><span class="tag">Desire Books</span><span class="tag">Sneaky Grind</span><span class="tag">Glam-Surf</span><span class="tag">Avalon Bubble</span><span class="tag">Koala Corridor</span><span class="tag">Careel Bay</span><span class="tag">North Av Break</span></div>
+  </div>
+
+  <div class="lcat cell" style="border-top:.5px solid var(--h)"><h3>Transport</h3>
+    <div class="sr"><span class="sl">Train</span><div class="bw"><div class="b" style="width:5%;background:rgba(138,48,48,.45)"></div></div><span class="pill pp">None</span></div>
+    <div class="sr"><span class="sl">Bus</span><div class="bw"><div class="b" style="width:80%;background:rgba(74,122,74,.45)"></div></div><span class="pill ph">High (B-Line express)</span></div>
+    <div class="sr"><span class="sl">Ferry</span><div class="bw"><div class="b" style="width:50%;background:rgba(138,96,32,.4)"></div></div><span class="pill pm">Moderate (Drive to Palm Beach)</span></div>
+    <div class="sr"><span class="sl">Light Rail</span><div class="bw"><div class="b" style="width:5%;background:rgba(138,48,48,.45)"></div></div><span class="pill pp">None</span></div>
+    <div class="sr"><span class="sl">Walkability</span><div class="bw"><div class="b" style="width:90%;background:rgba(74,122,74,.55)"></div></div><span class="pill pe">Excellent (Within village)</span></div>
+  </div>
+  <div class="lcat cell" style="border-top:.5px solid var(--h)"><h3>Lifestyle</h3>
+    <div class="sr"><span class="sl">Cafes &amp; Dining</span><div class="bw"><div class="b" style="width:98%;background:rgba(74,122,74,.55)"></div></div><span class="pill pe">Exceptional</span></div>
+    <div class="sr"><span class="sl">Retail</span><div class="bw"><div class="b" style="width:80%;background:rgba(74,122,74,.45)"></div></div><span class="pill ph">High (Boutique focused)</span></div>
+    <div class="sr"><span class="sl">Culture</span><div class="bw"><div class="b" style="width:70%;background:rgba(138,96,32,.4)"></div></div><span class="pill pg">Good (Cinema/Galleries)</span></div>
+    <div class="sr"><span class="sl">Telecoms / 5G</span><div class="bw"><div class="b" style="width:90%;background:rgba(74,122,74,.55)"></div></div><span class="pill pe">Excellent</span></div>
+  </div>
+  <div class="lcat cell" style="border-top:.5px solid var(--h)"><h3>Nature</h3>
+    <div class="sr"><span class="sl">Open Space</span><div class="bw"><div class="b" style="width:98%;background:rgba(74,122,74,.55)"></div></div><span class="pill pe">Exceptional</span></div>
+    <div class="sr"><span class="sl">Tree Cover</span><div class="bw"><div class="b" style="width:98%;background:rgba(74,122,74,.55)"></div></div><span class="pill pe">Exceptional (Koala corridor)</span></div>
+    <div class="sr"><span class="sl">Coast</span><div class="bw"><div class="b" style="width:98%;background:rgba(74,122,74,.55)"></div></div><span class="pill pe">Exceptional</span></div>
+    <div class="sr"><span class="sl">Ocean views</span><div class="bw"><div class="b" style="width:70%;background:rgba(138,96,32,.4)"></div></div><span class="pill pg">Good (Ocean-facing)</span></div>
+    <div class="sr"><span class="sl">Topography</span><div class="bw"><div class="b" style="width:38%;background:rgba(138,48,48,.35)"></div></div><span class="pill pm">Very hilly</span></div>
+  </div>
+  <div class="lcat cell" style="border-top:.5px solid var(--h)"><h3>Safety &amp; Social</h3>
+    <div class="sr"><span class="sl">Crime Rate</span><div class="bw"><div class="b" style="width:95%;background:rgba(74,122,74,.55)"></div></div><span class="pill pe">Excellent (22/1,000)</span></div>
+    <div class="sr"><span class="sl">Traffic</span><div class="bw"><div class="b" style="width:55%;background:rgba(138,96,32,.4)"></div></div><span class="pill pa">Average (The Neck)</span></div>
+    <div class="sr"><span class="sl">Airport Noise</span><div class="bw"><div class="b" style="width:98%;background:rgba(74,122,74,.55)"></div></div><span class="pill pe">Exceptional (None)</span></div>
+    <div class="sr"><span class="sl">Primary Schools</span><div class="bw"><div class="b" style="width:90%;background:rgba(74,122,74,.55)"></div></div><span class="pill pe">Excellent</span></div>
+    <div class="sr"><span class="sl">Secondary (Barrenjoey)</span><div class="bw"><div class="b" style="width:80%;background:rgba(74,122,74,.45)"></div></div><span class="pill ph">High</span></div>
+  </div>
+
+  <div class="scores-cell">
+    <div class="score cell"><div class="score-n">6.4<span>/10</span></div><div class="score-bar-wrap"><div class="score-cat">Transport</div><div class="score-bar"><div class="score-fill" style="width:64%;background:rgba(138,96,32,.4)"></div></div></div></div>
+    <div class="score cell"><div class="score-n">9.2<span>/10</span></div><div class="score-bar-wrap"><div class="score-cat">Lifestyle</div><div class="score-bar"><div class="score-fill" style="width:92%;background:rgba(74,122,74,.5)"></div></div></div></div>
+    <div class="score cell"><div class="score-n">9.8<span>/10</span></div><div class="score-bar-wrap"><div class="score-cat">Nature</div><div class="score-bar"><div class="score-fill" style="width:98%;background:rgba(74,122,74,.5)"></div></div></div></div>
+    <div class="score cell"><div class="score-n">9.4<span>/10</span></div><div class="score-bar-wrap"><div class="score-cat">Safety</div><div class="score-bar"><div class="score-fill" style="width:94%;background:rgba(74,122,74,.5)"></div></div></div></div>
+  </div>
+
+  <div class="wh-label cell"><span>Who lives here</span></div>
+  <div class="wh-col cell"><h4>The Creative Exile</h4><div class="title">Designers &amp; Creative Directors</div><p>Fled the Inner West for a studio in the trees. Work remotely three days a week, surf two mornings, and have organised their professional life so the 37km is an inconvenience rather than a barrier. The commute is chosen, not imposed.</p></div>
+  <div class="wh-col cell"><h4>The Salt-Stained Legacy</h4><div class="title">Multi-Generational Locals</div><p>Grew up in the surf club. Own their homes outright. Prioritise the ocean over everything. Watch the glam-surf demographic arrive with mixed feelings and a comprehensive knowledge of which breaks were theirs first.</p></div>
+  <div class="wh-col cell"><h4>The Sea-Change Executive</h4><div class="title">CBD Professionals</div><p>Value the disconnection. Spend weekends on Pittwater in yachts. Have enough seniority that the commute happens on their schedule rather than the company's. Chose Avalon because it feels nothing like the city and that is precisely the qualification.</p></div>
+  <div class="wh-col cell"><h4>The Eco-Warrior Matriarch</h4><div class="title">Community Preservationists</div><p>Active in local conservation. Shops at the wholefoods store. Has memorised the relevant sections of the Environmental Planning and Assessment Act. Ensures no new development ruins the canopy. The most effective planning constraint in the suburb.</p></div>
+
+  <div class="life-head" style="border-right:.5px solid var(--h)"><h2>Life in Avalon Beach</h2><span>2026</span></div>
+  <div class="le cell"><div class="n">01</div><h4>Old Barrenjoey Road</h4><p>The village core: vibrant but relaxed. Surf shops next to high-end boutiques where people genuinely chat with shopkeepers. Classic Surfboards and Beach Road define the streetscape. The high street that doesn't know it's a high street and is better for not knowing.</p></div>
+  <div class="le cell"><div class="n">02</div><h4>Food &amp; Drink</h4><p><strong>Every day</strong> — long black at Sneaky Grind, Avalon Organics for the weekly shop. <strong>Upscale</strong> — Alma for sophisticated Mexican, Barrenjoey House for the occasion. <strong>The standard</strong>: Pittwater-facing sundowners, which is not upscale but is non-negotiable.</p></div>
+  <div class="le cell"><div class="n">03</div><h4>Bangalley Headland</h4><p>The highest viewpoint on Sydney's Northern Beaches coastline. The walk that justifies the 37km from the CBD for anyone who has been told it is too far. It is not too far. The headland is the argument, made daily by everyone who completes it.</p></div>
+  <div class="le cell"><div class="n">04</div><h4>Desire Books &amp; Records</h4><p>The suburb's intellectual infrastructure and its most reliable signal that Avalon is not merely a surf town. The independent bookshop as character test: you can tell what kind of suburb you are in by whether this kind of place survives. In Avalon, it thrives.</p></div>
+  <div class="le cell" style="border-bottom:none"><div class="n">05</div><h4>Avalon Village Terrace</h4><p>Pedestrianisation upgrade completed 2026 — more alfresco dining, slower foot traffic, the village atmosphere formalised without being manufactured. The Avalon Market Day remains the annual peak event: thousands of visitors, one day, the entire suburb transformed.</p></div>
+  <div class="le cell" style="border-bottom:none"><div class="n">06</div><h4>2026 Update</h4><p>The <strong>Careel Bay Wetland Restoration</strong> finalised — new eco-boardwalk for the community. <strong>Village Terrace pedestrianisation</strong> complete. <strong>Gentle Density rezoning</strong> announced: luxury townhouses replacing older cottages around the village centre. The community is watching this last point very carefully.</p></div>
+  <!-- Gallery -->
+  <div style="grid-column:span 12;border-top:.5px solid var(--h);display:grid;grid-template-columns:repeat(6,1fr);gap:0"><div style="border-right:.5px solid var(--h);display:flex;flex-direction:column"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" style="width:100%;height:auto;display:block;filter:saturate(.85)"><div style="padding:10px 14px 12px;background:var(--bg);font-size:7px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink3);flex:1">Sundowners on Pittwater</div></div><div style="border-right:.5px solid var(--h);display:flex;flex-direction:column"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" style="width:100%;height:auto;display:block;filter:saturate(.85)"><div style="padding:10px 14px 12px;background:var(--bg);font-size:7px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink3);flex:1">Avalon Boardriders — SLSC</div></div><div style="border-right:.5px solid var(--h);display:flex;flex-direction:column"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" style="width:100%;height:auto;display:block;filter:saturate(.85)"><div style="padding:10px 14px 12px;background:var(--bg);font-size:7px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink3);flex:1">Watching the break</div></div><div style="border-right:.5px solid var(--h);display:flex;flex-direction:column"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" style="width:100%;height:auto;display:block;filter:saturate(.85)"><div style="padding:10px 14px 12px;background:var(--bg);font-size:7px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink3);flex:1">The kitchen garden</div></div><div style="border-right:.5px solid var(--h);display:flex;flex-direction:column"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" style="width:100%;height:auto;display:block;filter:saturate(.85)"><div style="padding:10px 14px 12px;background:var(--bg);font-size:7px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink3);flex:1">Sunday on the water</div></div><div style="display:flex;flex-direction:column"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" style="width:100%;height:auto;display:block;filter:saturate(.85)"><div style="padding:10px 14px 12px;background:var(--bg);font-size:7px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink3);flex:1">WFH — board on standby</div></div></div><div s
+
+  <div class="v-head" style="border-right:.5px solid var(--h)"><h2>Resident Voices</h2></div>
+  <div class="voice cell"><div class="vp">01 — Architect</div><div class="vr">45</div><div class="vq"><div class="vt">Loves it</div><div class="vx l">I love the light here and the way houses blend into the gums. The relationship between the built environment and the bush is unlike anywhere else in Sydney. I design differently here.</div></div><div class="vq"><div class="vt">Frustrates</div><div class="vx">The commuter crawl on Friday afternoons. It's a parking lot from Newport to Mona Vale. I leave early now. This has improved my Thursday evenings significantly.</div></div></div>
+  <div class="voice cell"><div class="vp">02 — Pro Surfer</div><div class="vr">24</div><div class="vq"><div class="vt">Loves it</div><div class="vx l">The waves at North Av are world-class. There is nothing more to say about that. The rest follows from it.</div></div><div class="vq"><div class="vt">Frustrates</div><div class="vx">I can't afford to rent anything bigger than a granny flat now. Neither can most of my mates. The surf club loses something when the locals can't afford to stay local.</div></div></div>
+  <div class="voice cell" style="border-right:none"><div class="vp">03 — Retiree</div><div class="vr">70</div><div class="vq"><div class="vt">Loves it</div><div class="vx l">It's still a village at heart. That is not nothing. That is, in fact, the primary achievement of a place that has been "discovered" approximately every ten years since 1970.</div></div><div class="vq"><div class="vt">Frustrates</div><div class="vx">The new crowds on weekends make it hard to find a park for my morning swim. I have adjusted my swim time to 6:15am. This is an acceptable solution that I resent.</div></div></div>
+
+  <div class="comm-head" style="border-right:.5px solid var(--h)"><h2>Community</h2></div>
+  <div class="dblock cell"><h3>Demographics</h3><div class="drow"><span class="dlbl">Population</span><span class="dval">~10,500</span></div><div class="drow"><span class="dlbl">Median age</span><span class="dval">44 yrs</span></div><div class="drow"><span class="dlbl">Single households</span><span class="dval">18%</span></div><div class="drow"><span class="dlbl">Tertiary educated</span><span class="dval">42%</span></div><div class="drow"><span class="dlbl">Median HH income</span><span class="dval">$2,850 / wk</span></div></div>
+  <div class="dblock cell"><h3>Housing</h3><div class="drow"><span class="dlbl">Renters</span><span class="dval">22% — lowest Northern Beaches</span></div><div class="drow"><span class="dlbl">Avg tenure</span><span class="dval">12.5 years</span></div><div class="drow"><span class="dlbl">Vacancy rate</span><span class="dval">1.2%</span></div><div class="drow"><span class="dlbl">Cars per HH</span><span class="dval">2.1</span></div></div>
+  <div class="dblock cell"><h3>Nature</h3><div class="drow"><span class="dlbl">Parkland</span><span class="dval">15% — 12 major parks/reserves</span></div><div class="drow"><span class="dlbl">Koala corridor</span><span class="dval">Spotted gum forest — protected</span></div><div class="drow"><span class="dlbl">Ocean pools</span><span class="dval">Bilgola &amp; Avalon (off-grid)</span></div><div class="drow"><span class="dlbl">Careel Bay Wetland</span><span class="dval">Restored 2026 — eco-boardwalk</span></div></div>
+  <div class="dblock cell"><h3>Safety — BOCSAR</h3><div class="drow"><span class="dlbl">Crime rate</span><span class="dval">22 per 1,000 — very low</span></div><div class="drow"><span class="dlbl">Most common</span><span class="dval">Malicious damage / theft</span></div><div class="drow"><span class="dlbl">Violent crime</span><span class="dval">Decreasing</span></div></div>
+
+  <div class="prop-dark">
+    <div class="prop-hd"><span>Property — April 2026</span></div>
+    <div class="pc"><div class="plbl">House (3-bed)</div><div class="pval">$3.15<span style="font-size:18px">M</span></div><div class="psub">Median April 2026</div><div class="pgrow">+22% since 2021</div></div>
+    <div class="pc"><div class="plbl">Unit (2-bed)</div><div class="pval">$1.28<span style="font-size:18px">M</span></div><div class="psub">Median April 2026</div><div class="pgrow">+15% since 2021</div></div>
+    <div class="pc"><div class="plbl">Rent (1-bed unit)</div><div class="pval">$750<span style="font-size:18px">/wk</span></div><div class="psub">Median weekly</div><div class="pgrow">+18% since 2021 — Yield ~2.8%</div></div>
+    <div class="pc"><div class="plbl">Sydney Percentile</div><div class="pval">Top<span style="font-size:20px"> 5%</span></div><div class="psub">By value</div><div class="pbar"><div class="pbar-track"><div class="pbar-fill" style="width:95%"></div></div><div class="pbar-label">The Northern Beaches secret that remote work made irrelevant to hide</div></div></div>
+  </div>
+
+  <div class="comm-head" style="grid-column:span 12;border-right:.5px solid var(--h)"><h2>2026 Update</h2></div>
+  <div class="upd-a cell"><h2>From Weekend Retreat to Year-Round Creative Hub</h2><p>Avalon is completing its transition from seasonal escape to permanent address. Remote work has made the 37km irrelevant for a growing cohort of creative professionals who have reorganised their working lives around the morning surf session rather than the morning commute.</p></div>
+  <div class="upd-b cell">
+    <div class="ui"><div class="ui-tag">Careel Bay Wetland — Complete</div><div class="ui-txt">Restoration finalised — new <strong>eco-boardwalk connecting the community to the wetland</strong>. The environmental infrastructure that the suburb's conservation culture has been working toward for a decade.</div></div>
+    <div class="ui"><div class="ui-tag">Village Terrace — Pedestrianised</div><div class="ui-txt">Core village pedestrianised — <strong>increased alfresco dining capacity</strong>, slower pace, more people spending more time in the centre. The upgrade that formalised what the village already was.</div></div>
+    <div class="ui"><div class="ui-tag">Gentle Density — Announced</div><div class="ui-txt">Rezoning allows <strong>luxury townhouses replacing older cottages</strong> around the village centre — the planning decision being watched most carefully by the community that defeated the last three.</div></div>
+  </div>
+
+  <div class="source"><span>Liveability: Domain 2026</span><span>Prices: CoreLogic / Domain Apr 2026</span><span>Census: ABS 2021</span><span>Crime: BOCSAR 2025</span><span>Schools: MySchool 2025</span></div>
+</div>
+</div>
+</body>
+</html>
